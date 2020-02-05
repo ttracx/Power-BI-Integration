@@ -1,0 +1,886 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bpr:release xmlns:bpr="http://www.blueprism.co.uk/product/release">
+    <bpr:name>Power BI Integration v1.0 - 20200205</bpr:name>
+    <bpr:release-notes>Initial Release</bpr:release-notes>
+    <bpr:created>2020-02-05 12:06:04Z</bpr:created>
+    <bpr:package-id>1004</bpr:package-id>
+    <bpr:package-name>Power BI Intergration</bpr:package-name>
+    <bpr:user-created-by>bpchris</bpr:user-created-by>
+    <bpr:contents count="1">
+        <webapiservice id="27be2abc-8e49-42a5-bfd6-2ac59fc0c058" name="Power BI Integration" enabled="true" xmlns="http://www.blueprism.co.uk/product/webapiservice">
+            <configuration baseurl="https://api.powerbi.com/" xmlns="">
+                <actions>
+                    <action id="2089" name="GROUP - Get Groups" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of workspaces the user has access to.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups?$filter=[filter]&amp;$top=[top]&amp;$skip=[skip]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="filter" expose="true" datatype="64">
+                                <initialvalue><![CDATA[true]]></initialvalue>
+                                <description><![CDATA[Filters the results, based on a boolean condition with odata query]]></description>
+                            </actionparameter>
+                            <actionparameter name="top" expose="true" datatype="64">
+                                <initialvalue><![CDATA[2147483647]]></initialvalue>
+                                <description><![CDATA[Returns only the first "n" results]]></description>
+                            </actionparameter>
+                            <actionparameter name="skip" expose="true" datatype="64">
+                                <initialvalue><![CDATA[0]]></initialvalue>
+                                <description><![CDATA[Skips the first "n" results]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters>
+                                <customoutputparameter type="JsonPath" name="Groups" path="$.value" datatype="collection"></customoutputparameter>
+                            </parameters>
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="2090" name="GROUP - Get Group Users" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of users that have access to the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/users">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters>
+                                <customoutputparameter type="JsonPath" name="Group Users" path="$.value" datatype="collection"></customoutputparameter>
+                            </parameters>
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="2091" name="GROUP - Create Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Creates new workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/groups?workspace[workspace version]=[workspace latest]">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+	"name" : "[name]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="workspace version" expose="false" datatype="64">
+                                <initialvalue><![CDATA[V2]]></initialvalue>
+                                <description><![CDATA[Workspace version]]></description>
+                            </actionparameter>
+                            <actionparameter name="workspace latest" expose="false" datatype="64">
+                                <initialvalue><![CDATA[true]]></initialvalue>
+                                <description><![CDATA[Create a workspace V2. The only supported value is true.]]></description>
+                            </actionparameter>
+                            <actionparameter name="name" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The name of the newly created group]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="2092" name="GROUP - Delete Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Deletes the specified workspace.]]></description>
+                        <request httpmethod="DELETE" urlpath="[version]/myorg/groups/[group id]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="2093" name="GROUP - Add Group User (Azure AD)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Grants the specified user permissions to the specified workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+	"emailAddress" : "[user email]"
+	"groupUserAccessRight" : "[group access right]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                            <actionparameter name="user email" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Email address of the user]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3092" name="GROUP - Add Group User (Service Principal)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Grants the specified user permissions to the specified workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "displayName" : "[display name]",
+  "identifier": "[identifier]",
+  "groupUserAccessRight": "[group access right]",
+  "principalType": "[principal type]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                            <actionparameter name="identifier" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Identifier of the principal]]></description>
+                            </actionparameter>
+                            <actionparameter name="principal type" expose="false" datatype="64">
+                                <initialvalue><![CDATA[App]]></initialvalue>
+                                <description><![CDATA[The principal type]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters>
+                                <customoutputparameter type="JsonPath" name="Error" path="$.error" datatype="text"></customoutputparameter>
+                            </parameters>
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3093" name="GROUP - Delete User In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Deletes the specified user permissions from the specified workspace.]]></description>
+                        <request httpmethod="DELETE" urlpath="[version]/myorg/groups/[group id]/users/[user]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="user" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The email address of the user or the service principal object id to delete]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3094" name="GROUP - Update Group User (Azure AD)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Update the specified user permissions to the specified workspace.]]></description>
+                        <request httpmethod="PUT" urlpath="[version]/myorg/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "emailAddress": "[user email]",
+  "groupUserAccessRight": "[group access right]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                            <actionparameter name="user email" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Email address of the user]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3095" name="GROUP - Update Group User (Service Principal)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Update the specified user permissions to the specified workspace.]]></description>
+                        <request httpmethod="PUT" urlpath="[version]/myorg/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "identifier": "[identifier]",
+  "groupUserAccessRight": "[group access right]",
+  "principalType": "[principal type]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="identifier" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Identifier of the principal]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                            <actionparameter name="principal type" expose="false" datatype="64">
+                                <initialvalue><![CDATA[App]]></initialvalue>
+                                <description><![CDATA[The principal type]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3096" name="USERS - Refresh User Permissions" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Refreshes user permissions in Power BI]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/RefreshUserPermissions">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters />
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3097" name="ADMIN - Datasets GetDatasetsAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of datasets for the organization.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/admin/datasets?$filter=[filter]&amp;$top=[top]&amp;$skip=[skip]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="filter" expose="true" datatype="64">
+                                <initialvalue><![CDATA[true]]></initialvalue>
+                                <description><![CDATA[Filters the results, based on a boolean condition]]></description>
+                            </actionparameter>
+                            <actionparameter name="top" expose="true" datatype="64">
+                                <initialvalue><![CDATA[2147483647]]></initialvalue>
+                                <description><![CDATA[Returns only the first n results]]></description>
+                            </actionparameter>
+                            <actionparameter name="skip" expose="true" datatype="64">
+                                <initialvalue><![CDATA[0]]></initialvalue>
+                                <description><![CDATA[Skips the first n results]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3098" name="ADMIN - Datasets GetDatasetsInGroupAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of datasets from the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/admin/groups/[group id]/datasets?$expand=[expand]&amp;$filter=[filter]&amp;$top=[top]&amp;$skip=[skip]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="filter" expose="true" datatype="64">
+                                <initialvalue><![CDATA[true]]></initialvalue>
+                                <description><![CDATA[Filters the results, based on a boolean condition]]></description>
+                            </actionparameter>
+                            <actionparameter name="top" expose="true" datatype="64">
+                                <initialvalue><![CDATA[2147483647]]></initialvalue>
+                                <description><![CDATA[Returns only the first n results]]></description>
+                            </actionparameter>
+                            <actionparameter name="skip" expose="true" datatype="64">
+                                <initialvalue><![CDATA[0]]></initialvalue>
+                                <description><![CDATA[Skips the first n results]]></description>
+                            </actionparameter>
+                            <actionparameter name="expand" expose="true" datatype="64">
+                                <initialvalue><![CDATA[encryption]]></initialvalue>
+                                <description><![CDATA[Expands related entities inline]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3100" name="ADMIN - Datasets GetDatasourcesAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of datasources for the specified dataset.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/admin/datasets/[dataset id]/datasources">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="dataset id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The dataset id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3101" name="ADMIN - Groups AddUserAsAdmin (Azure AD)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Grants user permissions to the specified workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/admin/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+	"emailAddress" : "[user email]"
+	"groupUserAccessRight" : "[group access right]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="user email" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Email address of the user]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3102" name="ADMIN - Groups AddUserAsAdmin (Service Principal)" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Grants user permissions to the specified workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/admin/groups/[group id]/users">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "identifier": "[identifier]",
+  "groupUserAccessRight": "[group access right]",
+  "principalType": "[principal type]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="identifier" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Identifier of the principal]]></description>
+                            </actionparameter>
+                            <actionparameter name="group access right" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Access rights user has for the workspace]]></description>
+                            </actionparameter>
+                            <actionparameter name="principal type" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The principal type]]></description>
+                            </actionparameter>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3103" name="ADMIN - Groups DeleteUserAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Removes user permissions to the specified workspace.]]></description>
+                        <request httpmethod="DELETE" urlpath="[version]/myorg/admin/groups/[group id]/users/[user]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="user" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The user principal name (UPN) of the user to remove (usually the user's email or service principal identifier)]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3104" name="ADMIN - Groups GetGroupsAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of workspaces for the organization.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/admin/groups?$expand=[expand]&amp;$filter=[filter]&amp;$top=[top]&amp;$skip=[skip]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="expand" expose="true" datatype="64">
+                                <initialvalue><![CDATA[user]]></initialvalue>
+                                <description><![CDATA[Expands related entities inline, receives a comma-separated list of data types. Supported: users, reports, dashboards, datasets, dataflows]]></description>
+                            </actionparameter>
+                            <actionparameter name="filter" expose="true" datatype="64">
+                                <initialvalue><![CDATA[true]]></initialvalue>
+                                <description><![CDATA[Filters the results based on a boolean condition]]></description>
+                            </actionparameter>
+                            <actionparameter name="top" expose="true" datatype="64">
+                                <initialvalue><![CDATA[5000]]></initialvalue>
+                                <description><![CDATA[Returns only the first n results. This parameter is mandatory and must be in the range of 1-5000.]]></description>
+                            </actionparameter>
+                            <actionparameter name="skip" expose="true" datatype="64">
+                                <initialvalue><![CDATA[0]]></initialvalue>
+                                <description><![CDATA[Skips the first n results. Use with top to fetch results beyond the first 5000.]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3105" name="ADMIN - Groups RestoreDeletedGroupAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Restores a deleted workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/admin/groups/[group id]/restore">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "name": "[name]",
+  "emailAddress": "[email]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="name" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The name of the group to be restored.]]></description>
+                            </actionparameter>
+                            <actionparameter name="email" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The email address of the owner of the group to be restored.]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3106" name="ADMIN - Groups UpdateGroupAsAdmin" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Updates the specified workspace properties.]]></description>
+                        <request httpmethod="PATCH" urlpath="[version]/myorg/admin/groups/[group id]">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+  "name": "[name]",
+  "description": "[description]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="name" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The group name]]></description>
+                            </actionparameter>
+                            <actionparameter name="description" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The group description. Available only for admin API calls.]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3107" name="REPORT - Get Reports" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of reports from "My Workspace".]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/reports">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters />
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3108" name="REPORT - Get Reports In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of reports from the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/reports">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3109" name="REPORT - Get Report" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns the specified report from "My Workspace".]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/reports/[report id]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3110" name="REPORT - Get Report In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns the specified report from the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/reports/[report id]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3111" name="REPORT - Clone Report" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Clones the specified report from "My Workspace".]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/reports/[report id]/Clone">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+	"name" : "[name]",
+	"targetWorkspaceId" : "[target workspace id]",
+	"targetModelId " : "[target model id]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                            <actionparameter name="target workspace id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Optional parameter for specifying the target workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="target model id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Optional parameter for specifying the target associated dataset id.]]></description>
+                            </actionparameter>
+                            <actionparameter name="name" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The new report name]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3112" name="REPORT - Clone Report In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Clones the specified report from the specified workspace.]]></description>
+                        <request httpmethod="POST" urlpath="[version]/myorg/groups/[group id]/reports/[report id]/Clone">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/json" />
+                            </headers>
+                            <bodycontent type="1">
+                                <template><![CDATA[{
+	"name" : "[name]",
+	"targetWorkspaceId" : "[target workspace id]",
+	"targetModelId " : "[target model id]"
+}]]></template>
+                            </bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                            <actionparameter name="name" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The new report name]]></description>
+                            </actionparameter>
+                            <actionparameter name="target workspace id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Optional parameter for specifying the target workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="target model id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[Optional parameter for specifying the target associated dataset id.]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3113" name="REPORT - Delete Report" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Deletes the specified report from "My Workspace".]]></description>
+                        <request httpmethod="DELETE" urlpath="[version]/myorg/reports/[report id]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3114" name="REPORT - Delete Report In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Deletes the specified report from the specified workspace.]]></description>
+                        <request httpmethod="DELETE" urlpath="[version]/myorg/groups/[group id]/reports/[report id]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3115" name="REPORT - Export Report" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Exports the specified report from "My Workspace" to a .pbix file.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/reports/[report id]/Export">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/zip" />
+                            </headers>
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3116" name="REPORT - Export Report In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Exports the specified report from the specified workspace to a .pbix file.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/reports/[report id]/Export">
+                            <headers>
+                                <httpheader name="Content-Type" value="application/zip" />
+                            </headers>
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3117" name="REPORT - Get Pages" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of pages within the specified report from "My Workspace".]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/reports/[report id]/pages">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3118" name="REPORT - Get Pages In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns a list of pages within the specified report from the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/reports/[report id]/pages">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3119" name="REPORT - Get Page" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns the specified page within the specified report from "My Workspace".]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/reports/[report id]/pages/[report page]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report page" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The page name]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                    <action id="3120" name="REPORT - Get Page In Group" enabled="true" enableRequestOutputParameter="false" disableSendingOfRequest="false">
+                        <description><![CDATA[Returns the specified page within the specified report from the specified workspace.]]></description>
+                        <request httpmethod="GET" urlpath="[version]/myorg/groups/[group id]/reports/[report id]/pages/[report page]">
+                            <headers />
+                            <bodycontent type="0"></bodycontent>
+                        </request>
+                        <parameters>
+                            <actionparameter name="group id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The workspace id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report id" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report id]]></description>
+                            </actionparameter>
+                            <actionparameter name="report page" expose="true" datatype="64">
+                                <initialvalue><![CDATA[]]></initialvalue>
+                                <description><![CDATA[The report page name]]></description>
+                            </actionparameter>
+                        </parameters>
+                        <outputparameters>
+                            <parameters />
+                            <code><![CDATA[]]></code>
+                        </outputparameters>
+                    </action>
+                </actions>
+                <commonparameters>
+                    <actionparameter name="access_token" expose="true" datatype="64">
+                        <initialvalue><![CDATA[]]></initialvalue>
+                        <description><![CDATA[Microsoft AAD authentication access token]]></description>
+                    </actionparameter>
+                    <actionparameter name="version" expose="false" datatype="64">
+                        <initialvalue><![CDATA[v1.0]]></initialvalue>
+                        <description><![CDATA[API version number]]></description>
+                    </actionparameter>
+                </commonparameters>
+                <commonheaders>
+                    <httpheader name="Authorization" value="Bearer [access_token]" />
+                </commonheaders>
+                <commonauthentications>
+                    <authentication type="0" />
+                </commonauthentications>
+                <commoncode>
+                    <codeproperties code="" language="visualbasic">
+                        <namespaces>
+                            <namespace>System</namespace>
+                            <namespace>System.Drawing</namespace>
+                            <namespace>System.Data</namespace>
+                        </namespaces>
+                        <references>
+                            <reference>System.dll</reference>
+                            <reference>System.Data.dll</reference>
+                            <reference>System.Xml.dll</reference>
+                            <reference>System.Drawing.dll</reference>
+                        </references>
+                    </codeproperties>
+                </commoncode>
+                <configurationsettings>
+                    <configurationsettings requesttimeout="10" authserverrequesttimeout="10" />
+                </configurationsettings>
+            </configuration>
+        </webapiservice>
+    </bpr:contents>
+</bpr:release>
